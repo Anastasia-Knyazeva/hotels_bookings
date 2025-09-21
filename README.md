@@ -14,12 +14,12 @@ hotels ↔ bookings (1-N)
 bookings ↔ payments (1-N)
 
 # Комментарии к физической модели:
-hotels(hotel_id PK, …) — справочник отелей; stars с CHECK 1..5; created_at по умолчанию now().
-room_types(room_type_id PK, code UQ, …) — справочник типов номеров (ограничения на вместимость и кровати).
-rooms(room_id PK, hotel_id FK, room_type_id FK, unique(hotel_id, room_number)) — номера как пересечение отеля и типа.
-guests(guest_id PK, email UQ, …) — справочник гостей.
-bookings(booking_id PK, guest_id FK, hotel_id FK, …, nights STORED) — факт бронирования; status из фиксированного множества; вычисляемое поле nights = checkout_date - checkin_date; SCD-3-поля prev_* + updated_at.
-payments(payment_id PK, booking_id FK ON DELETE CASCADE, amount CHECK >= 0, method IN ('card','cash','transfer')).
+1. hotels(hotel_id PK, …) — справочник отелей; stars с CHECK 1..5; created_at по умолчанию now().
+2. room_types(room_type_id PK, code UQ, …) — справочник типов номеров (ограничения на вместимость и кровати).
+3. rooms(room_id PK, hotel_id FK, room_type_id FK, unique(hotel_id, room_number)) — номера как пересечение отеля и типа.
+4. guests(guest_id PK, email UQ, …) — справочник гостей.
+5. bookings(booking_id PK, guest_id FK, hotel_id FK, …, nights STORED) — факт бронирования; status из фиксированного множества; вычисляемое поле nights = checkout_date - checkin_date; SCD-3-поля prev_* + updated_at.
+6. payments(payment_id PK, booking_id FK ON DELETE CASCADE, amount CHECK >= 0, method IN ('card','cash','transfer')).
 
 Индексы: селективные (ix_bookings_guest, ix_bookings_hotel, композитный на датах, индексы rooms по hotel/type, payments по booking).
 
